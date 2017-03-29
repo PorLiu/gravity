@@ -7,20 +7,23 @@ public class RegularPendulum extends AbstractPendulum {
     private double delta, iterations = 0;
     private double dissipation;
     private double lastTheta, lastVel, lastAccel;
-    /** gravitational constant */
-    public static final double GRAVITY = 9.80665;
+    
+    /**
+     * initialize a new GravityModel object with earth gravity
+     */
+    private static GravityModel earthGravity = new GravityConstant(9.80665);
 
     /**
      * Creates a new Pendulum instance 
      */
     public RegularPendulum (double inLength, double inMass, double inTheta0, 
 		     double inDelta, double inDiss) {
-	super (inLength, inMass, inTheta0, GRAVITY);
+	super (inLength, inMass, inTheta0, earthGravity);
 	delta=inDelta;
 	dissipation = inDiss;
 	lastVel = 0;
 	lastTheta = this.getMaxAngularDisplacement ();
-	lastAccel = -(this.getGravitationalField () / this.getStringLength ())*Math.sin (lastTheta);
+	lastAccel = -(this.earthGravity.getGravitationalField () / this.getStringLength ())*Math.sin (lastTheta);
     }
 
     public RegularPendulum (double inLength, double inMass, double inTheta0, 
@@ -32,7 +35,7 @@ public class RegularPendulum extends AbstractPendulum {
 	iterations++;
 	lastTheta = lastTheta + lastVel*delta;
 	lastVel = lastVel + lastAccel*delta;
-	lastAccel = - dissipation*lastVel - this.getGravitationalField () / this.getStringLength () * Math.sin (lastTheta);
+	lastAccel = - dissipation*lastVel - this.earthGravity.getGravitationalField () / this.getStringLength () * Math.sin (lastTheta);
     }
 
     public double getLastTheta () { return lastTheta; }
