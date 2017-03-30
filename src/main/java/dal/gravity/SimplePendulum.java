@@ -6,7 +6,7 @@ package dal.gravity;
 public class SimplePendulum extends AbstractPendulum {
 
     private double angularFrequency, periodOfMotion;
-    private static GravityModel gravityModel;
+    private GravityModel spGravityModel;
     
     /**
      * Creates a new Pendulum instance using
@@ -16,12 +16,19 @@ public class SimplePendulum extends AbstractPendulum {
      */
     public SimplePendulum (double inLength, double inMass, double inTheta0, GravityModel gravityModel) {
     super (inLength, inMass, inTheta0, gravityModel);
-    this.gravityModel = gravityModel;
-	angularFrequency = Math.sqrt (this.gravityModel.getGravitationalField () / this.getStringLength ());
+    this.spGravityModel = gravityModel;
+	angularFrequency = calculateAngularFrequency();
 	periodOfMotion = 2 * Math.PI 
-	    * Math.sqrt (this.getStringLength () / this.gravityModel.getGravitationalField ());
+	    * Math.sqrt (this.getStringLength () / this.spGravityModel.getGravitationalField ());
     }
-
+    
+    /**
+     * calculate frequency
+     */
+    public double calculateAngularFrequency(){
+    	return Math.sqrt (this.spGravityModel.getGravitationalField () / this.getStringLength ());
+    }
+    
     /**
      * provides this Pendulum's angular frequency
      */ 
@@ -37,5 +44,12 @@ public class SimplePendulum extends AbstractPendulum {
      */
     public double getTheta (double t) {
 	return this.getMaxAngularDisplacement () * Math.cos (angularFrequency * t);
+    }
+    
+    @Override
+    public void setGravityModel(GravityModel gravityModel){
+    	this.spGravityModel = gravityModel;
+    	//update the angularFrequency
+    	angularFrequency = calculateAngularFrequency();
     }
 }

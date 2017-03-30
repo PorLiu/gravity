@@ -27,6 +27,14 @@ public class PendulumRunner {
 	int iterations = (int) (1/delta);
 	System.out.println ("analytical vs. numerical displacement (fine, coarse)");
 	for (int second = 1; second <= 20; second++) {
+		//change the GravityConstant to represent Jupiter's gravitational field at the 11th second
+		//from a Earth's GravityConstant
+		if(second == 11){
+			GravityConstant jupiterGravity = new GravityConstant(25);
+			sp.setGravityModel(jupiterGravity);
+			rp.setGravityModel(jupiterGravity);
+			rpCoarse.setGravityModel(jupiterGravity);
+		}
 	    for (int i = 0; i < iterations; i++) rp.step ();
 	    for (int i = 0; i < 10; i++) rpCoarse.step (); 
 	    System.out.println ("t=" + second + "s: \t" + 
