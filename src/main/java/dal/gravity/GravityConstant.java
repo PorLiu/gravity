@@ -6,6 +6,7 @@ public class GravityConstant implements GravityModel{
 		this.gravity = gravity;
 	}
 	
+	@Override
 	public double getGravitationalField(){
 		return this.gravity;
 	}
